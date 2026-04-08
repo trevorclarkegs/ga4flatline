@@ -32,4 +32,5 @@ jobs:
             --write-all \
             --no-data-as-zero \
             --lookback-days 7 \
+            --service-account-json service_account.json \
             --sheet-service-account service_account.json
