@@ -28,7 +28,7 @@ jobs:
       - name: Run GA4 audit
         run: |
           python ga4_days_since_event_sheets.py \
-            --property-id 394823318 \
+            --properties-sheet \
             --write-all \
             --no-data-as-zero \
             --lookback-days 7 \
