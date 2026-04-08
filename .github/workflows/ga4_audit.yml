@@ -1,0 +1,35 @@
+name: GA4 Days-Since-Event Audit
+
+on:
+  schedule:
+    - cron: '30 11 * * 1-5'  # 6:30 AM Central (UTC-5) Monday–Friday
+  workflow_dispatch:          # allows manual trigger from GitHub Actions tab
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install gspread oauth2client google-analytics-data google-auth-oauthlib
+
+      - name: Write service account JSON
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+
+      - name: Run GA4 audit
+        run: |
+          python ga4_days_since_event_sheets.py \
+            --properties-sheet \
+            --write-all \
+            --no-data-as-zero \
+            --lookback-days 7 \
+            --sheet-service-account service_account.json
