@@ -1,6 +1,0 @@
-python ga4_days_since_event_sheets.py ^
-  --property-id 394823318 ^
-  --write-all ^
-  --no-data-as-zero ^
-  --lookback-days 7 ^
-  --sheet-service-account service_account.json
