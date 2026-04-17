@@ -16,7 +16,7 @@ New in this version
 -------------------
 • --no-data-as-zero => writes 0 instead of >lookback_days for NO_DATA cases
 • --write-all       => writes ALL requested events for each property (not just exceeded)
-• Default event set: click_to_call, appointment_complete, contact_us_complete, lease_application_complete
+• Default event set: page_view, click_to_call, appointment_complete, contact_us_complete, lease_application_complete
 • No Wrike logic at all
 """
 
@@ -62,6 +62,7 @@ DEFAULT_CLIENT_SECRET_FILE = "client_secret.json"
 
 # Default monitored events & thresholds (requested set)
 DEFAULT_EVENTS = [
+    {"name": "page_view", "threshold_days": 1, "severity": "MEDIUM"},
     {"name": "click_to_call", "threshold_days": 3, "severity": "MEDIUM"},
     {"name": "appointment_complete", "threshold_days": 7, "severity": "MEDIUM"},
     {"name": "contact_us_complete", "threshold_days": 5, "severity": "MEDIUM"},
