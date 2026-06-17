@@ -26,6 +26,7 @@ jobs:
           echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
           echo '${{ secrets.GA4_TOKEN }}' > token_ga4.json
           echo '${{ secrets.WRIKE_CONFIG }}' > wrike_config.json
+          echo '${{ secrets.CLIENT_SECRET_JSON }}' > client_secret.json
 
       - name: Run GA4 audit
         run: python ga4_days_since_event_sheets.py --sheet-service-account service_account.json
