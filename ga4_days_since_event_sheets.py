@@ -112,10 +112,18 @@ def load_properties_from_file(path: str) -> List[Dict[str, str]]:
 
 # ----------------------------- GA4 Auth & Queries -----------------------------
 def get_credentials_oauth(client_secret_file: str, token_file: str) -> UserCredentials:
+    from google.auth.transport.requests import Request
     creds: Optional[UserCredentials] = None
     if os.path.exists(token_file):
         creds = UserCredentials.from_authorized_user_file(token_file, SCOPES)
-    if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+        # Silently refresh using refresh token — works in headless/CI environments
+        creds.refresh(Request())
+        with open(token_file, "w", encoding="utf-8") as f:
+            f.write(creds.to_json())
+    elif not creds or not creds.valid:
+        if not os.path.exists(client_secret_file):
+            raise FileNotFoundError(f"OAuth client secret not found: {client_secret_file}")
         flow = InstalledAppFlow.from_client_secrets_file(client_secret_file, SCOPES)
         creds = flow.run_local_server(port=0)
         with open(token_file, "w", encoding="utf-8") as f:
