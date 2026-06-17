@@ -1,0 +1,15 @@
+# Credentials & secrets
+client_secret.json
+token_ga4.json
+service_account.json
+wrike_config.json
+
+# Output files
+*.csv
+wrike_ticket_state.json
+tz_cache.json
+
+# Misc
+__pycache__/
+*.pyc
+.env
