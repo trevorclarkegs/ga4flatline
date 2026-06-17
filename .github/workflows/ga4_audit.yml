@@ -1,7 +1,9 @@
-name: GA4 Days-Since-Event Audit
+name: GA4 Event Audit
 
 on:
-  workflow_dispatch:  # triggered by cron-job.org
+  workflow_dispatch:
+  schedule:
+    - cron: '0 13 * * 1'  # Every Monday at 9am ET (13:00 UTC)
 
 jobs:
   audit:
@@ -17,18 +19,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install gspread oauth2client google-analytics-data google-auth-oauthlib
+        run: pip install gspread google-analytics-data google-auth-oauthlib google-auth requests
 
-      - name: Write service account JSON
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+      - name: Write credentials
+        run: |
+          echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+          echo '${{ secrets.GA4_TOKEN }}' > token_ga4.json
+          echo '${{ secrets.WRIKE_CONFIG }}' > wrike_config.json
 
       - name: Run GA4 audit
-        run: |
-          python ga4_days_since_event_sheets.py \
-            --properties-sheet \
-            --write-all \
-            --no-data-as-zero \
-            --lookback-days 7 \
-            --service-account-json service_account.json \
-            --sheet-service-account service_account.json
+        run: python ga4_days_since_event_sheets.py --sheet-service-account service_account.json
